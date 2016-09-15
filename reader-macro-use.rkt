@@ -1,6 +1,5 @@
 #lang racket
 
-;'(#reader"reader-macro.rkt" /123/ abc)
+'(#reader"reader-macro.rkt" /12\d+3/)
 
-#reader"reader-macro.rkt" /123/
-
+(define x #reader"reader-macro.rkt" /12\d+3/)

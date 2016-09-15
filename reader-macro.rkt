@@ -14,6 +14,5 @@
 
 (define (parse-expr src in)
   (define expr-match
-    (regexp-match #px"^(\\S)(.*)\\1([im])?" in))
-  (displayln expr-match)
-  (quasisyntax/loc src (pregexp #,(third expr-match))))
+    (regexp-match #px"^(\\S)(.*?)\\1([im])?" in))
+  (datum->syntax #f `(pregexp ,(bytes->string/utf-8 (third expr-match)))))
