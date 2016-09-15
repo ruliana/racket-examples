@@ -1,4 +1,5 @@
 #lang racket
+; === Boilerplate code
 (provide (rename-out [regexp-read read]
                      [regexp-read-syntax read-syntax]))
 
@@ -17,6 +18,8 @@
       [(ch in src line col pos) (parse-expr src in)]))
   (make-readtable (current-readtable)
                   #\/ 'non-terminating-macro reader))
+
+; === Code that matters
 
 (define (parse-expr src in)
   (define expr-match

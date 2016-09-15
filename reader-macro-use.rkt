@@ -1,3 +1,5 @@
 #lang reader "reader-macro-glue.rkt"
 
-(let ([a /123/]) a)
+(define a/b "no-conflict")
+
+(regexp-match /1(\d+)3/ "123") ; \o/ My own regexp literal!
