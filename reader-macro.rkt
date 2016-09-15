@@ -1,18 +1,26 @@
 #lang racket
- 
-(provide read read-syntax)
- 
-(define (read in)
-  (syntax->datum (read-syntax #f in)))
+(provide (rename-out [regexp-read read]
+                     [regexp-read-syntax read-syntax]))
 
-(define (read-syntax src in)
-  (skip-whitespace in)
-  (parse-expr src in))
+(define (regexp-read in)
+  (parameterize ([current-readtable (regexp-readtable)])
+    (read in)))
 
-(define (skip-whitespace in)
-  (regexp-match #px"\\s*" in))
+(define (regexp-read-syntax src in)
+  (parameterize ([current-readtable (regexp-readtable)])
+    (read-syntax src in)))
+
+(define (regexp-readtable)
+  (define reader
+    (case-lambda
+      [(ch in) (syntax->datum (parse-expr #f in))]
+      [(ch in src line col pos) (parse-expr src in)]))
+  (make-readtable (current-readtable)
+                  #\/ 'non-terminating-macro reader))
 
 (define (parse-expr src in)
   (define expr-match
-    (regexp-match #px"^(\\S)(.*?)\\1([im])?" in))
-  (datum->syntax #f `(pregexp ,(bytes->string/utf-8 (third expr-match)))))
+    (regexp-match #px"^(.*?)\\/" in))
+  (define rx
+    (bytes->string/utf-8 (second expr-match)))
+  (datum->syntax #f `(pregexp ,rx)))

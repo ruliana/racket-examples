@@ -1,5 +1,3 @@
-#lang racket
+#lang reader "reader-macro-glue.rkt"
 
-'(#reader"reader-macro.rkt" /12\d+3/)
-
-(define x #reader"reader-macro.rkt" /12\d+3/)
+(let ([a /123/]) a)
