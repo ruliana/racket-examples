@@ -1,4 +1,13 @@
 #lang racket
+(define (open-and-forget)
+  (define out (open-output-file
+               "/tmp/test.txt"
+               #:exists 'truncate))
+  (displayln "writing!")
+  (writeln "can I write?" out))
+
+; === How? ===
+
 (define (do-work a-function)
   (define cust (make-custodian))
   (define (start) (displayln "->"))
@@ -18,13 +27,6 @@
      (displayln "unfire!"))
   (do-work fire))
 
-(define (open-and-forget)
-  (define out (open-output-file
-               "/tmp/test.txt"
-               #:exists 'truncate))
-  (displayln "writing!")
-  (writeln "can I write?" out))
+;(open-and-forget)
 
-(open-and-forget)
-
-;(do-work open-and-forget)
+(do-work open-and-forget)
